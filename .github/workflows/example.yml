@@ -51,3 +51,10 @@ jobs:
           if ($x -gt 0) {
              Write-Host "Compare string with number"
           }
+          
+      - name: Script compare object with string
+        run: |
+          $obj = New-Object PSObject -Property @{ Name = "Test" }
+          if ($obj -eq "Test") {
+             Write-Host "Compare object with string"
+          }
