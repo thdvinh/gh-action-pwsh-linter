@@ -1,0 +1,53 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    defaults:
+      run:
+        shell: pwsh
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build application
+        run: |
+          $buildDir = "${{ env.BUILD_DIR }}"
+          Write-Host "Building to: $buildDir"
+          dotnet build
+
+      - name: Run tests
+        run: |
+          $testResult = "${{ env.TEST_RESULT }}"
+          Write-Host "Test result path: $testResult"
+
+      - name: Deploy with secret
+        run: |
+          $key = "${{ secrets.DEPLOY_KEY }}"
+          $artifact = Join-Path "${{ vars.DEPLOY_PATH }}" "output.zip"
+
+      - name: Script with wrong condition
+        run: |
+          $x = 1
+          if ($x -gte 0) {
+             Write-Host "Wrong condition"
+          }
+      
+      - name: Script with missing close paren
+        run: |
+          $x = 1
+          if ($x -gt 0 {
+             Write-Host "missing close paren"
+          }
+
+      - name: Script comparing string with number
+        run: |
+          $x = "1"
+          if ($x -gt 0) {
+             Write-Host "Compare string with number"
+          }
